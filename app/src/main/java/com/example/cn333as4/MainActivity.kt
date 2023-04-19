@@ -1,20 +1,17 @@
 package com.example.cn333as4
 
 import android.os.Bundle
-import android.view.Display
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Display(Modifier)
+                    DisplayImage(Modifier)
                 }
             }
         }
@@ -54,6 +51,7 @@ fun KeywordForm(onSubmit: (String, Int, Int) -> Unit) {
     var width by remember { mutableStateOf(0) }
     var height by remember { mutableStateOf(0) }
     val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -106,15 +104,23 @@ fun KeywordForm(onSubmit: (String, Int, Int) -> Unit) {
                 }
             )
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = { onSubmit(keyword, width, height) },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text(text = "Show Image")
+        }
     }
 }
 
 
 @Composable
-fun Display(modifier: Modifier) {
+fun DisplayImage(modifier: Modifier) {
     var keyword by remember { mutableStateOf("") }
     var width by remember { mutableStateOf(0) }
     var height by remember { mutableStateOf(0) }
+    val key = keyword.replace(" ", "-")
 
     Column(
         modifier = modifier
@@ -139,7 +145,7 @@ fun Display(modifier: Modifier) {
                 Box(modifier = Modifier.height(300.dp)) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("https://loremflickr.com/$width/$height/$keyword")
+                            .data("https://loremflickr.com/$width/$height/$key")
                             .crossfade(true)
                             .build(),
                         contentDescription = "",
@@ -168,6 +174,6 @@ fun Display(modifier: Modifier) {
 @Composable
 fun DefaultPreview() {
     Cn333as4Theme {
-        Display(Modifier)
+        DisplayImage(Modifier)
     }
 }
